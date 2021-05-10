@@ -19,6 +19,14 @@ class ProducerController {
         id: id}
     });
   }
+
+  async delete(id) {
+    return Producer.destroy({
+      where: {
+        id: id
+      }
+    })
+  }
 }
 
 module.exports = new ProducerController();

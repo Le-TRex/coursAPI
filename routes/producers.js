@@ -9,8 +9,13 @@ router.get('/producers', async(req, res, next) => {
 });
 
 router.get('/producers/:id', async(req, res, newt) => {
-  const producer = await ProducerController.getById(req.params.id)
-  res.json(producer)
+  const producer = await ProducerController.getById(req.params.id);
+
+  if (producer) {
+    res.json(producer)
+  } else {
+    res.status(404).json({'error': "Producer not found"})
+  }
 });
 
 router.post('/producers', async(req, res, next) => {
@@ -37,5 +42,15 @@ router.patch('/producers/:id', async(req, res, next) => {
     res.status(404).json({'error': "Producer not found"})
   }
 });
+
+router.delete('/producers/:id', async(req, res, next) => {
+  const success = await ProducerController.delete(req.params.id);
+
+  if (success) {
+    return res.status(204).end();
+  } else {
+    return res.status(404).json({'error': "Producer not found"})
+  }
+})
 
 module.exports = router;
