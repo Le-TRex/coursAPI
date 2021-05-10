@@ -30,7 +30,7 @@ async function main(){
 
   routes(app);
 
-  app.listen(process.env.PORT, () => console.log(`Server started on ${process.env.PORT}`));
+  app.listen(process.env.PORT, () => console.log(`Youpi ! Server started on ${process.env.PORT}`));
 }
 
 main();

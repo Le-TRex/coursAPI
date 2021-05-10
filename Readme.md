@@ -16,6 +16,12 @@ Run these command in your terminal :
   
 `sequelize db:seed:all`
 
+ssi les commandes `sequelize` ne fonctionnenet pas :
+
+`node_modules/.bin/sequelize db:migrate `
+
+`node_modules/.bin/sequelize db:seed:all `
+
 ### Launch server
 Run this command in your terminal :  
 `npm run dev`
