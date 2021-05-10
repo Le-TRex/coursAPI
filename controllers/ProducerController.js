@@ -10,7 +10,7 @@ class ProducerController {
   }
 
   async add(data) {
-    return Producer.create({data})
+    return Producer.create(data)
   }
 
   async update(id, payload) {
