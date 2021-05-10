@@ -9,11 +9,15 @@ class ProducerController {
     return Producer.findByPk(id)
   }
 
-  async add(firstName, lastName) {
-    return Producer.create({
-      firstName,
-      lastName
-    })
+  async add(data) {
+    return Producer.create({data})
+  }
+
+  async update(id, payload) {
+    return Producer.update(payload, {
+      where: {
+        id: id}
+    });
   }
 }
 

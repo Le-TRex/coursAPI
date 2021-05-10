@@ -13,11 +13,28 @@ router.get('/producers/:id', async(req, res, newt) => {
   res.json(producer)
 });
 
-router.post('/producers', async(req, res, next)=>{
+router.post('/producers', async(req, res, next) => {
   if(req.body.firstName && req.body.lastName) {
-    const insertedProducer = await  ProducerController.add(req.body.firstName, req.body.lastName);
+    const insertedProducer = await  ProducerController.add(req.body);
     //status = code HTTP + json = la ressource créée
     res.status(201).json(insertedProducer)
+  } else {
+    res.status(400).end();
+  }
+});
+
+router.patch('/producers/:id', async(req, res, next) => {
+  if (!req.body.firstName && !req.body.lastName) {
+    res.status(400).end();
+  }
+
+  const updatedProducer = await ProducerController.update(req.params.id, req.body);
+
+  //si un producteur a été trouvé
+  if(updatedProducer[0] === 1) {
+    res.json(await ProducerController.getById(req.params.id))
+  } else {
+    res.status(404).json({'error': "Producer not found"})
   }
 });
 
