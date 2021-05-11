@@ -1,10 +1,11 @@
+const sequelize = require("sequelize");
 const Movie = require('../models').Movie;
 
 class MovieController {
 
   
   async getAll() {
-    return Movie.findAll({ limit: 10 });
+    return Movie.findAll();
   }
 
   async getByGenre(id) {
@@ -17,6 +18,12 @@ class MovieController {
 
   async getById(id) {
     return Movie.findByPk(id);
+  }
+
+  async sortByYear() {
+    return Movie.findAll({
+      order: sequelize.col('year')
+    })
   }
 
   async add(data) {

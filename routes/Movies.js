@@ -4,24 +4,19 @@ let express = require('express');
 let router = express.Router();
 
 router.get('/movies', async (req, res, next) => {
-  if(req.query.genre){
+  if(req.query.genre){ // Trier par genreId
     const movies = await MovieController.getByGenre(req.query.genre);
     if (movies) {
       res.json(movies);
     } else {
       res.status(404).json({'error': "Movie doesn't exist"})
     }
+  } else if (req.query.sort) { //ordonner par année
+    res.json(await MovieController.sortByYear());
+  } else { //Afficher TOUS les films
+    res.json(await MovieController.getAll());
   }
 
-  if(req.query.search){
-    const movies = await MovieController.getBySearch(req.query.search);
-    if (movies) {
-      res.json(movies);
-    } else {
-      res.status(404).json({'error': "Movie doesn't exist"})
-    }
-  }
-  res.json(await MovieController.getAll());
 });
 
 router.get('/movies/:id', async (req, res, next) => {
