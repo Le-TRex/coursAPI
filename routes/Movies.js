@@ -21,7 +21,7 @@ router.get('/movies', async (req, res, next) => {
       res.json(await MovieController.sortByYear());
     }
 
-  } else if(req.query.page) { //limiter nombre de résultats + pagination
+  } else if (req.query.page) { //limiter nombre de résultats + pagination
     const movies = await MovieController.getByPage(req.query.page);
     if (movies) {
       res.json(movies);
@@ -29,8 +29,27 @@ router.get('/movies', async (req, res, next) => {
       res.status(404).json({'error': "Movie doesn't exist"})
     }
 
-  }else { //Afficher TOUS les films
+  } else { //Afficher TOUS les films
     res.json(await MovieController.getAll());
+  }
+});
+
+router.get('/movies/search', async(req, res, next) => {
+  let column = Object.keys(req.query)[0];
+
+  if (column == 'year' || column == 'title') { // si la colonne sur laquelle porte la recherche est année ou titre
+
+    //récupération des films correspondants à la recherche
+    const movies = await MovieController.getBySearch(req.query);
+
+    if (movies.length <1 ) { //si tableau de movies est vide
+      res.status(404).json( { error: "Movies not found. Remember that here, the wilcard is % :)" } )
+    } else { //si il y a des movies
+      res.json(movies);
+    }
+
+  } else { // si la colonne de recherche est != de titre ou année
+    res.status(400).json({ error: "You can search only by year or title for now :)" })
   }
 });
 
@@ -79,7 +98,6 @@ router.delete('/movies/:id', async (req, res, next) => {
   } else {
     res.status(404).json({'error': "Movie not found"});
   }
-
 });
 
 module.exports = router;
