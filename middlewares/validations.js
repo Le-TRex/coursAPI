@@ -15,9 +15,10 @@ class validations {
     
     async checkYear(year){
         let regex = new RegExp(/\b(19|20)\d\d\b/g) 
-        console.log(regex.test(year))
         return regex.test(year) ? true : false
     }
+
+    // async checkProducerId
 }
 
 module.exports = new validations();
