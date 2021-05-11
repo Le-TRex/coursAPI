@@ -4,6 +4,23 @@ let express = require('express');
 let router = express.Router();
 
 router.get('/movies', async (req, res, next) => {
+  if(req.query.genre){
+    const movies = await MovieController.getByGenre(req.query.genre);
+    if (movies) {
+      res.json(movies);
+    } else {
+      res.status(404).json({'error': "Movie doesn't exist"})
+    }
+  }
+
+  if(req.query.search){
+    const movies = await MovieController.getBySearch(req.query.search);
+    if (movies) {
+      res.json(movies);
+    } else {
+      res.status(404).json({'error': "Movie doesn't exist"})
+    }
+  }
   res.json(await MovieController.getAll());
 });
 
@@ -16,6 +33,8 @@ router.get('/movies/:id', async (req, res, next) => {
     res.status(404).json({'error': "Movie doesn't exist"})
   }
 });
+
+
 
 router.post('/movies', async (req, res, next) => {
   if (req.body.firstName && req.body.lastName) {
