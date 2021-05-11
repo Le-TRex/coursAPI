@@ -3,7 +3,7 @@ const MovieController = require('../controllers').MovieController;
 let express = require('express');
 let router = express.Router();
 
-const {checkName, checkLength, checkYear} = require('../middlewares/validations')
+const {checkLength, checkYear, checkGenreId, checkProducerId} = require('../middlewares/validations')
 
 router.get('/movies', async (req, res, next) => {
   if(req.query.genre){ // Trier par genreId
@@ -63,8 +63,9 @@ router.get('/movies/:id', async (req, res, next) => {
 });
 
 router.post('/movies', async (req, res, next) => {
-  if (req.body.title && req.body.description && req.body.year) {
-    if(await checkLength(req.body.title, 1, 50) == true && await checkLength(req.body.description, 2, 250) == true && checkYear(req.body.year) == true){
+  if (req.body.title && req.body.description && req.body.year && req.body.producerId && req.body.genreId) {
+
+    if(await checkLength(req.body.title, 1, 50) == true && await checkLength(req.body.description, 2, 250) == true && await checkYear(req.body.year) == true && await checkGenreId(req.body.genreId) && await checkProducerId(req.body.producerId)){
       const insertedMovie = await MovieController.add(req.body);
       res.status(201).json(insertedMovie);
     }else{
@@ -79,15 +80,16 @@ router.patch('/movies/:id', async (req, res, next) => {
   if (!req.body.title && !req.body.description && !req.body.year) {
     res.status(400).json({"error": "Please enter at least one value"}).end();
   }
-  if(await checkName(req.body.name) == true){
+
+  if(await checkLength(req.body.title, 1, 50) == false || await checkLength(req.body.description, 2, 250) == false || await checkYear(req.body.year) == false ){
+    res.status(403).json({'error': "Please enter a correct values"}).end();
+  }else{
     const updatedMovie = await MovieController.update(req.params.id, req.body);
     if (updatedMovie[0] === 1) {
       res.json(await MovieController.getById(req.params.id))
     } else {
       res.status(404).json({'error': "Movie not found"})
     }
-  }else{
-    res.status(403).json({'error': "Please enter a correct values"}).end();
   }
 });
 

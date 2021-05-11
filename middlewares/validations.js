@@ -1,3 +1,5 @@
+const Producer = require('../models').Producer;
+const Genre = require('../models').Genre;
 class validations {
 
     async checkName(name){
@@ -15,8 +17,15 @@ class validations {
     
     async checkYear(year){
         let regex = new RegExp(/\b(19|20)\d\d\b/g) 
-        console.log(regex.test(year))
         return regex.test(year) ? true : false
+    }
+
+    async checkProducerId(id){
+        return Producer.findByPk(id)
+    }
+
+    async checkGenreId(id){
+        return Genre.findByPk(id)
     }
 }
 
