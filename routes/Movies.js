@@ -13,7 +13,6 @@ router.get('/movies', async (req, res, next) => {
     }
 
   } else if (req.query.sort) { //ordonner par année
-
     if(req.query.sort != 'year'){
       res.status(400).json({ error: "Sort is only allowed by year for now ;)" })
     } else {
