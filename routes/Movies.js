@@ -17,6 +17,15 @@ router.get('/movies', async (req, res, next) => {
     res.json(await MovieController.getAll());
   }
 
+  if(req.query.page){
+    const movies = await MovieController.getByPage(req.query.page);
+    if (movies) {
+      res.json(movies);
+    } else {
+      res.status(404).json({'error': "Movie doesn't exist"})
+    }
+  }
+  res.json(await MovieController.getAll());
 });
 
 router.get('/movies/:id', async (req, res, next) => {
