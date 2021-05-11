@@ -11,12 +11,21 @@ router.get('/movies', async (req, res, next) => {
     } else {
       res.status(404).json({'error': "Movie doesn't exist"})
     }
+
   } else if (req.query.sort) { //ordonner par année
     res.json(await MovieController.sortByYear());
-  } else { //Afficher TOUS les films
+
+  } else if(req.query.page) { //limiter nombre de résultats + pagination
+    const movies = await MovieController.getByPage(req.query.page);
+    if (movies) {
+      res.json(movies);
+    } else {
+      res.status(404).json({'error': "Movie doesn't exist"})
+    }
+
+  }else { //Afficher TOUS les films
     res.json(await MovieController.getAll());
   }
-
 });
 
 router.get('/movies/:id', async (req, res, next) => {
