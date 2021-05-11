@@ -12,7 +12,12 @@ router.get('/movies', async (req, res, next) => {
       res.status(404).json({'error': "Movie doesn't exist"})
     }
   } else if (req.query.sort) { //ordonner par année
-    res.json(await MovieController.sortByYear());
+    if(req.query.sort != 'year'){
+      res.status(400).json({ error: "Sort is only allowed by year for now ;)" })
+    } else {
+      res.json(await MovieController.sortByYear());
+    }
+
   } else { //Afficher TOUS les films
     res.json(await MovieController.getAll());
   }
