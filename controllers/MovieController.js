@@ -16,14 +16,15 @@ class MovieController {
       let amont = await Movie.count()
       number += amont
     }
-    return Movie.findAll({ limit: 10, offset: number});
+    return Movie.findAll({ limit: 10, offset: number, include: [Producer, Genre]});
   }
 
   async getByGenre(id) {
     return Movie.findAll({
       where: {
         genreId: id
-      }
+      },
+      include: [Producer]
     });
   }
 
@@ -33,7 +34,8 @@ class MovieController {
 
   async sortByYear() {
     return Movie.findAll({
-      order: sequelize.col('year')
+      order: sequelize.col('year'),
+      include: [Producer, Genre]
     })
   }
 
