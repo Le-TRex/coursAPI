@@ -13,8 +13,8 @@ router.get('/movies', async (req, res, next) => {
     }
   }
 
-  if(req.query.search){
-    const movies = await MovieController.getBySearch(req.query.search);
+  if(req.query.page){
+    const movies = await MovieController.getByPage(req.query.page);
     if (movies) {
       res.json(movies);
     } else {

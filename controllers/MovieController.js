@@ -4,7 +4,18 @@ class MovieController {
 
   
   async getAll() {
-    return Movie.findAll({ limit: 10 });
+    return Movie.findAll();
+  }
+
+  async getByPage(num) {
+    let number = -10
+    if(num != "last"){
+      number += num * 10
+    }else if(num == "last"){
+      let amont = await Movie.count()
+      number += amont
+    }
+    return Movie.findAll({ limit: 10, offset: number});
   }
 
   async getByGenre(id) {
