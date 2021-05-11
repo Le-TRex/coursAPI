@@ -3,6 +3,8 @@ const GenreController = require('../controllers').GenreController;
 let express = require('express');
 let router = express.Router();
 
+const {checkName} = require('../middlewares/validations')
+
 router.get('/genres', async (req, res, next) => {
   res.json(await GenreController.getAll());
 });
@@ -18,27 +20,28 @@ router.get('/genres/:id', async (req, res, next) => {
 });
 
 router.post('/genres', async (req, res, next) => {
-  if (req.body.firstName && req.body.lastName) {
+  if (await checkName(req.body.name) == true) {
     const insertedGenre = await GenreController.add(req.body);
     res.status(201).json(insertedGenre);
   } else {
-    res.status(400).end();
+    res.status(403).json({'error': "Please enter a correct values"}).end();
   }
 });
 
 router.patch('/genres/:id', async (req, res, next) => {
-  if (!req.body.firstName && !req.body.lastName) {
+  if (!req.body.name) {
     res.status(400).end();
   }
-
-  const updatedGenre = await GenreController.update(req.params.id, req.body);
-
-  if (updatedGenre[0] === 1) {
-    res.json(await GenreController.getById(req.params.id))
-  } else {
-    res.status(404).json({'error': "Genre not found"})
+  if(await checkName(req.body.name) == true){
+    const updatedGenre = await GenreController.update(req.params.id, req.body)
+    if (updatedGenre[0] === 1) {
+      res.json(await GenreController.getById(req.params.id))
+    } else {
+      res.status(404).json({'error': "Genre not found"})
+    }
+  }else{
+    res.status(403).json({'error': "Please enter a correct values"}).end();
   }
-
 });
 
 router.delete('/genres/:id', async (req, res, next) => {

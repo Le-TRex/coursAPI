@@ -3,6 +3,8 @@ const MovieController = require('../controllers').MovieController;
 let express = require('express');
 let router = express.Router();
 
+const {checkName, checkLength, checkYear} = require('../middlewares/validations')
+
 router.get('/movies', async (req, res, next) => {
   if(req.query.genre){ // Trier par genreId
     const movies = await MovieController.getByGenre(req.query.genre);
@@ -28,14 +30,12 @@ router.get('/movies', async (req, res, next) => {
     }
 
   }else { //Afficher TOUS les films
-
     res.json(await MovieController.getAll());
   }
 });
 
 router.get('/movies/:id', async (req, res, next) => {
   const movie = await MovieController.getById(req.params.id);
-
   if (movie) {
     res.json(movie);
   } else {
@@ -43,35 +43,37 @@ router.get('/movies/:id', async (req, res, next) => {
   }
 });
 
-
-
 router.post('/movies', async (req, res, next) => {
-  if (req.body.firstName && req.body.lastName) {
-    const insertedMovie = await MovieController.add(req.body);
-    res.status(201).json(insertedMovie);
+  if (req.body.title && req.body.description && req.body.year) {
+    if(await checkLength(req.body.title, 1, 50) == true && await checkLength(req.body.description, 2, 250) == true && checkYear(req.body.year) == true){
+      const insertedMovie = await MovieController.add(req.body);
+      res.status(201).json(insertedMovie);
+    }else{
+      res.status(403).json({'error': "Please enter a correct values"}).end();
+    }
   } else {
     res.status(400).end();
   }
 });
 
 router.patch('/movies/:id', async (req, res, next) => {
-  if (!req.body.firstName && !req.body.lastName) {
-    res.status(400).end();
+  if (!req.body.title && !req.body.description && !req.body.year) {
+    res.status(400).json({"error": "Please enter at least one value"}).end();
   }
-
-  const updatedMovie = await MovieController.update(req.params.id, req.body);
-
-  if (updatedMovie[0] === 1) {
-    res.json(await MovieController.getById(req.params.id))
-  } else {
-    res.status(404).json({'error': "Movie not found"})
+  if(await checkName(req.body.name) == true){
+    const updatedMovie = await MovieController.update(req.params.id, req.body);
+    if (updatedMovie[0] === 1) {
+      res.json(await MovieController.getById(req.params.id))
+    } else {
+      res.status(404).json({'error': "Movie not found"})
+    }
+  }else{
+    res.status(403).json({'error': "Please enter a correct values"}).end();
   }
-
 });
 
 router.delete('/movies/:id', async (req, res, next) => {
   const success = await MovieController.delete(req.params.id);
-
   if (success) {
     return res.status(204).end();
   } else {
