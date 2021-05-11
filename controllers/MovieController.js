@@ -5,6 +5,10 @@ const Genre = require('../models').Genre;
 
 class MovieController {
 
+/*
+* FUNCTIONS USED TO GET A/SOME MOVIE/S
+ */
+
   async getAll() {
     return Movie.findAll({ include: [Producer, Genre]});
   }
@@ -53,10 +57,17 @@ class MovieController {
     })
   }
 
+  /*
+  * FUNCTION USED TO CREATE A MOVIE
+   */
+
   async add(data) {
     return Movie.create(data)
   }
 
+  /*
+  * FUNCTION USED TO UPDATE A MOVIE
+   */
   async update(id, payload) {
     return Movie.update(payload, {
       where: {
@@ -65,6 +76,9 @@ class MovieController {
     });
   }
 
+  /*
+  * FUNCTION USED TO DELETE A MOVIE
+   */
   async delete(id) {
     return Movie.destroy({
       where: {
