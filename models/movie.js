@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Producer);
-      this.belongsTo(models.Genre);
+      this.belongsTo(models.Producer, {foreignKey: 'producerId'});
+      this.belongsTo(models.Genre, {foreignKey: 'genreId'});
     }
   };
   Movie.init({

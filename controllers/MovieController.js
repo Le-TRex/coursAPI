@@ -3,7 +3,7 @@ const Movie = require('../models').Movie;
 class MovieController {
 
   async getAll() {
-    return Movie.findAll();
+    return Movie.findAll({ limit: 10 });
   }
 
   async getById(id) {
