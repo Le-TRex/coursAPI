@@ -13,7 +13,12 @@ router.get('/movies', async (req, res, next) => {
     }
 
   } else if (req.query.sort) { //ordonner par année
-    res.json(await MovieController.sortByYear());
+
+    if(req.query.sort != 'year'){
+      res.status(400).json({ error: "Sort is only allowed by year for now ;)" })
+    } else {
+      res.json(await MovieController.sortByYear());
+    }
 
   } else if(req.query.page) { //limiter nombre de résultats + pagination
     const movies = await MovieController.getByPage(req.query.page);
@@ -24,6 +29,7 @@ router.get('/movies', async (req, res, next) => {
     }
 
   }else { //Afficher TOUS les films
+
     res.json(await MovieController.getAll());
   }
 });
