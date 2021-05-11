@@ -2,6 +2,7 @@ const sequelize = require("sequelize");
 const Movie = require('../models').Movie;
 const Producer = require('../models').Producer;
 const Genre = require('../models').Genre;
+
 class MovieController {
 
   async getAll() {
@@ -40,7 +41,7 @@ class MovieController {
   }
 
   async add(data) {
-    return Movie.create(data)
+      return Movie.create(data)
   }
 
   async update(id, payload) {

@@ -6,6 +6,6 @@ module.exports = function(app){
   app.use('/api', [
     producerRouter,
     movieRouter,
-    genreRouter
+    genreRouter,
   ]);
 };
