@@ -2,8 +2,17 @@ const Movie = require('../models').Movie;
 
 class MovieController {
 
+  
   async getAll() {
     return Movie.findAll({ limit: 10 });
+  }
+
+  async getByGenre(id) {
+    return Movie.findAll({
+      where: {
+        genreId: id
+      }
+    });
   }
 
   async getById(id) {
