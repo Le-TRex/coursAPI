@@ -33,6 +33,19 @@ class MovieController {
     return Movie.findByPk(id);
   }
 
+  async getBySearch(data){
+    let column = Object.keys(data)[0];
+    let research = Object.values(data)[0];
+
+    return Movie.findAll({
+      where:
+        {
+          [column]:
+            { [sequelize.Op.like]: research }
+        }
+    })
+  }
+
   async sortByYear() {
     return Movie.findAll({
       order: sequelize.col('year'),
@@ -41,7 +54,7 @@ class MovieController {
   }
 
   async add(data) {
-      return Movie.create(data)
+    return Movie.create(data)
   }
 
   async update(id, payload) {
@@ -59,7 +72,6 @@ class MovieController {
       }
     })
   }
-
 }
 
 module.exports = new MovieController();
