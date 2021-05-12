@@ -30,7 +30,7 @@ router.post('/genres', async (req, res, next) => {
     const insertedGenre = await GenreController.add(req.body);
     res.status(201).json(insertedGenre);
   } else {
-    res.status(403).json({'error': "Please enter a correct values"}).end();
+    res.status(400).json({'error': "Please enter a correct values"}).end();
   }
 });
 
@@ -49,7 +49,7 @@ router.patch('/genres/:id', async (req, res, next) => {
       res.status(404).json({'error': "Genre not found"})
     }
   }else{
-    res.status(403).json({'error': "Please enter a correct values"}).end();
+    res.status(400).json({'error': "Please enter a correct values"}).end();
   }
 });
 
