@@ -5,6 +5,9 @@ let router = express.Router();
 
 const {checkName} = require('../middlewares/validations')
 
+/*
+* GET ROUTES
+ */
 router.get('/genres', async (req, res, next) => {
   res.json(await GenreController.getAll());
 });
@@ -19,6 +22,9 @@ router.get('/genres/:id', async (req, res, next) => {
   }
 });
 
+/*
+* POST ROUTE
+ */
 router.post('/genres', async (req, res, next) => {
   if (await checkName(req.body.name) == true) {
     const insertedGenre = await GenreController.add(req.body);
@@ -28,6 +34,9 @@ router.post('/genres', async (req, res, next) => {
   }
 });
 
+/*
+* PATCH ROUTE
+ */
 router.patch('/genres/:id', async (req, res, next) => {
   if (!req.body.name) {
     res.status(400).end();
@@ -44,6 +53,9 @@ router.patch('/genres/:id', async (req, res, next) => {
   }
 });
 
+/*
+* DELETE ROUTE
+ */
 router.delete('/genres/:id', async (req, res, next) => {
   const success = await GenreController.delete(req.params.id);
 
