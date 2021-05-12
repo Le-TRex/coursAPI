@@ -42,7 +42,8 @@ router.get('/movies', async (req, res, next) => {
     let lastPageNumber = parseInt((totalNumberMovies / 10) +1)
     let pageNumber = req.query.page
 
-    if (movies) {
+
+    if (movies.length > 0) {
       
       selfPage = "Vous êtes à la page : " + moviePage + pageNumber
       if(pageNumber != 1){
@@ -63,7 +64,7 @@ router.get('/movies', async (req, res, next) => {
       
       res.json(movies);
     } else {
-      res.status(404).json({'error': "Movie doesn't exist"})
+      res.status(404).json({'error': "This page doesn't exist"})
     }
 
     /* DISPLAY ALL MOVIES */
