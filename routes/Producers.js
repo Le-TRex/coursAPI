@@ -42,7 +42,7 @@ router.patch('/producers/:id', async(req, res, next) => {
   }
 
   if(await checkName(req.body.firstName) == false || await checkName(req.body.lastName) == false){
-    res.status(403).json({'error': "Please enter a correct values"}).end();
+    res.status(400).json({'error': "Please enter a correct values"}).end();
 
   }else{
 

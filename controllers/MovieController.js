@@ -63,6 +63,7 @@ class MovieController {
   /*
   * FUNCTION USED TO UPDATE A MOVIE
    */
+  
   async update(id, payload) {
     return Movie.update(payload, {
       where: {

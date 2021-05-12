@@ -5,6 +5,7 @@ let router = express.Router();
 
 const {checkLength, checkYear, checkGenreId, checkProducerId} = require('../middlewares/validations')
 let moviePage = "localhost:3000/api/movies?page="
+
 /*
 * GET ROUTES
  */
@@ -42,7 +43,6 @@ router.get('/movies', async (req, res, next) => {
     let lastPageNumber = parseInt((totalNumberMovies / 10) +1)
     let pageNumber = req.query.page
 
-
     if (movies.length > 0) {
       
       selfPage = "Vous êtes à la page : " + moviePage + pageNumber
@@ -57,11 +57,12 @@ router.get('/movies', async (req, res, next) => {
         nextPage = "La page suivante est la page : " + moviePage + pageNumber
         lastPage = "La dernière page est la page : " + moviePage + lastPageNumber
       }
+      
       movies.push(selfPage)
       movies.push(prevPage)
       movies.push(nextPage)
       movies.push(lastPage)      
-      
+ 
       res.json(movies);
     } else {
       res.status(404).json({'error': "This page doesn't exist"})
@@ -117,7 +118,7 @@ router.post('/movies', async (req, res, next) => {
       const insertedMovie = await MovieController.add(req.body);
       res.status(201).json(insertedMovie);
     }else{
-      res.status(403).json({'error': "Please enter a correct values"}).end();
+      res.status(400).json({'error': "Please enter a correct values"}).end();
     }
   } else {
     res.status(400).end();
@@ -136,7 +137,7 @@ router.patch('/movies/:id', async (req, res, next) => {
     || await checkLength(req.body.description, 2, 250) == false
     || await checkYear(req.body.year) == false ){
 
-    res.status(403).json({'error': "Please enter a correct values"}).end();
+    res.status(400).json({'error': "Please enter a correct values"}).end();
   }else{
     const updatedMovie = await MovieController.update(req.params.id, req.body);
     if (updatedMovie[0] === 1) {
