@@ -15,12 +15,7 @@ class MovieController {
 
   async getByPage(num) {
     let number = -10
-    if(num != "last"){
-      number += num * 10
-    }else if(num == "last"){
-      let amount = await Movie.count()
-      number += amount
-    }
+    number += num * 10
     return Movie.findAll({ limit: 10, offset: number, include: [Producer, Genre]});
   }
 
