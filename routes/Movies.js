@@ -4,7 +4,7 @@ let express = require('express');
 let router = express.Router();
 
 const {checkLength, checkYear, checkGenreId, checkProducerId} = require('../middlewares/validations')
-
+let moviePage = "localhost:3000/api/movies?page="
 /*
 * GET ROUTES
  */
@@ -31,7 +31,36 @@ router.get('/movies', async (req, res, next) => {
     /* PAGINATION */
   } else if (req.query.page) {
     const movies = await MovieController.getByPage(req.query.page);
+    const allMovies = await MovieController.getAll();
+
+    let prevPage
+    let selfPage
+    let nextPage
+    let lastPage
+
+    let totalNumberMovies = allMovies.length
+    let lastPageNumber = parseInt((totalNumberMovies / 10) +1)
+    let pageNumber = req.query.page
+
     if (movies) {
+      
+      selfPage = "Vous êtes à la page : " + moviePage + pageNumber
+      if(pageNumber != 1){
+        prevPage = "La page précédente est la page : " + moviePage + (pageNumber - 1)
+      }
+      if(pageNumber == lastPageNumber){
+        nextPage = "Il n'y a pas de prochaine page" 
+        lastPage = "Vous êtes sur la dernière page :)" 
+      }else{
+        pageNumber ++
+        nextPage = "La page suivante est la page : " + moviePage + pageNumber
+        lastPage = "La dernière page est la page : " + moviePage + lastPageNumber
+      }
+      movies.push(selfPage)
+      movies.push(prevPage)
+      movies.push(nextPage)
+      movies.push(lastPage)      
+      
       res.json(movies);
     } else {
       res.status(404).json({'error': "Movie doesn't exist"})
