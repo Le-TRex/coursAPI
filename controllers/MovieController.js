@@ -18,8 +18,8 @@ class MovieController {
     if(num != "last"){
       number += num * 10
     }else if(num == "last"){
-      let amont = await Movie.count()
-      number += amont
+      let amount = await Movie.count()
+      number += amount
     }
     return Movie.findAll({ limit: 10, offset: number, include: [Producer, Genre]});
   }
